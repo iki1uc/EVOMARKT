@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>EVOCITY · RUN‑3 · COCKPIT · ALLE STATIONEN</title>
+
+<style>
+body {
+    background: #000;
+    color: #0f0;
+    font-family: 'Consolas', monospace;
+    padding: 20px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 12px;
+}
+
+header {
+    border-bottom: 2px solid #ffd700;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+header h1 {
+    font-size: 20px;
+    color: #ffd700;
+    letter-spacing: 3px;
+}
+#clock { font-size: 12px; color: #666; }
+
+main {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+}
+
+#pipeline {
+    background: #0a0a12;
+    border: 1px solid #1a1a2a;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.station-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.station {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+}
+.station .name { color: #ffd700; font-weight: bold; }
+.station .status { color: #4f4; font-size: 9px; }
+.station .status.inactive { color: #666; }
+
+.laeufer-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.laeufer {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+}
+.laeufer .name { color: #4f4; font-weight: bold; }
+.laeufer .status { color: #4ff; font-size: 9px; }
+
+.feld-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+}
+.feld {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+}
+.feld .name { color: #f4f; font-weight: bold; }
+.feld .status { color: #ff4; font-size: 9px; }
+
+#panel {
+    background: #0a0a12;
+    border: 1px solid #1a1a2a;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+#panel h3 { color: #666; font-size: 11px; border-bottom: 1px solid #1a1a2a; padding-bottom: 6px; }
+
+#log {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 9px;
+    color: #6a6a8a;
+    line-height: 1.4;
+    max-height: 200px;
+    background: #06060a;
+    border-radius: 4px;
+    padding: 6px;
+}
+
+#log .entry { padding: 1px 0; border-bottom: 1px solid #0a0a12; }
+#log .time { color: #444; }
+#log .msg.ok { color: #4f4; }
+#log .msg.warn { color: #ff4; }
+
+.console {
+    background: #111;
+    border: 1px solid #333;
+    padding: 12px;
+    font-size: 11px;
+    white-space: pre-wrap;
+    min-height: 60px;
+    border-radius: 4px;
+    color: #0f0;
+}
+
+button {
+    background: #111;
+    color: #0f0;
+    border: 1px solid #333;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+button:hover { border-color: #ffd700; background: #1a1a2a; }
+button.primary { border-color: #ffd700; color: #ffd700; }
+button.primary:hover { background: #ffd700; color: #000; }
+
+.cockpit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    font-size: 9px;
+    color: #666;
+    margin-top: 6px;
+}
+.cockpit-grid .wert { color: #0f0; }
+.cockpit-grid .gold { color: #ffd700; }
+
+#controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+@media (max-width: 800px) {
+    main { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>⚡ EVOCITY · RUN‑3 · COCKPIT</h1>
+    <div>
+        <span id="clock">⏱️ --:--:--</span>
+        <span style="margin-left:12px;color:#666;" id="cycle-count">Zyklus 0</span>
+    </div>
+</header>
+
+<main>
+    <div id="pipeline">
+        <h2 style="color:#6cf;font-size:14px;margin-bottom:8px;">📐 PIPELINE · RUN‑3</h2>
+
+        <!-- Stationen -->
+        <div style="font-size:9px;color:#666;margin-bottom:4px;">🔺 STATIONEN</div>
+        <div class="station-group" id="stationen">
+            <div class="station"><div class="name">XyX</div><div class="status">● aktiv</div></div>
+            <div class="station"><div class="name">AIR</div><div class="status">● aktiv</div></div>
+            <div class="station"><div class="name">AIV</div><div class="status">● aktiv</div></div>
+        </div>
+
+        <!-- Läufer -->
+        <div style="font-size:9px;color:#666;margin-bottom:4px;">🌀 LÄUFER</div>
+        <div class="laeufer-group" id="laeufer">
+            <div class="laeufer"><div class="name">NC.in</div><div class="status">● bereit</div></div>
+            <div class="laeufer"><div class="name">NC.out</div><div class="status">● bereit</div></div>
+            <div class="laeufer"><div class="name">NC.mid</div><div class="status">● bereit</div></div>
+        </div>
+
+        <!-- Felder -->
+        <div style="font-size:9px;color:#666;margin-bottom:4px;">◈ FELDER</div>
+        <div class="feld-group" id="felder">
+            <div class="feld"><div class="name">NC.feld</div><div class="status">● bereit</div></div>
+            <div class="feld"><div class="name">NC.warp</div><div class="status">● bereit</div></div>
+            <div class="feld"><div class="name">NC.core</div><div class="status">● bereit</div></div>
+        </div>
+
+        <!-- Cockpit-Richter -->
+        <div class="cockpit-grid">
+            <div>Energie: <span class="gold" id="energie-wert">0</span></div>
+            <div>Zustand: <span class="wert" id="zustand-wert">idle</span></div>
+            <div>Admin: <span class="wert" id="admin-status">● bereit</span></div>
+        </div>
+
+        <div id="controls">
+            <button class="primary" id="btn-run">▶ RUN‑3</button>
+            <button id="btn-richter">⚡ RICHTER</button>
+            <button id="btn-reset">⟲ RESET</button>
+        </div>
+
+        <div class="console" id="run3-out">Bereit für RUN‑3…</div>
+    </div>
+
+    <div id="panel">
+        <h3>📊 STATUS</h3>
+        <div id="log">
+            <div class="entry"><span class="time">[INIT]</span> <span class="msg ok">⚡ EVOCITY · RUN‑3 · COCKPIT</span></div>
+        </div>
+        <div style="display:flex;gap:10px;font-size:9px;color:#666;border-top:1px solid #1a1a2a;padding-top:6px;">
+            <span>🔴 <span id="status-led" style="color:#4f4;">●</span> bereit</span>
+            <span>📦 <span id="module-count">0</span>/9 aktiv</span>
+        </div>
+    </div>
+</main>
+
+<script>
+// ============================================================
+// EVOCITY · RUN‑3 · COCKPIT · ALLE STATIONEN
+// ============================================================
+
+// ─── RUN‑3 KERN ──────────────────────────────────────────────
+const RUN3 = {
+    stationen: ["XyX", "AIR", "AIV"],
+    laeufer: ["NC.in", "NC.out", "NC.mid"],
+    felder: ["NC.feld", "NC.warp", "NC.core"],
+
+    status: {
+        stationen: {},
+        laeufer: {},
+        felder: {}
+    },
+
+    start() {
+        // Alle Stationen aktivieren
+        for (const s of this.stationen) {
+            this.status.stationen[s] = 'aktiv';
+        }
+        for (const l of this.laeufer) {
+            this.status.laeufer[l] = 'bereit';
+        }
+        for (const f of this.felder) {
+            this.status.felder[f] = 'bereit';
+        }
+
+        return {
+            pipeline: "Pipelineblitz‑RUN‑3",
+            stationen: this.stationen.map(s => ({ name: s, status: this.status.stationen[s] })),
+            laeufer: this.laeufer.map(l => ({ name: l, status: this.status.laeufer[l] })),
+            felder: this.felder.map(f => ({ name: f, status: this.status.felder[f] })),
+            status: "OK",
+            stamp: Date.now()
+        };
+    },
+
+    updateUI() {
+        // Stationen
+        const stationDivs = document.querySelectorAll('#stationen .station');
+        stationDivs.forEach((div, i) => {
+            const statusEl = div.querySelector('.status');
+            const name = this.stationen[i];
+            if (this.status.stationen[name] === 'aktiv') {
+                statusEl.textContent = '● aktiv';
+                statusEl.style.color = '#4f4';
+            } else {
+                statusEl.textContent = '● inaktiv';
+                statusEl.style.color = '#666';
+            }
+        });
+
+        // Läufer
+        const laeuferDivs = document.querySelectorAll('#laeufer .laeufer');
+        laeuferDivs.forEach((div, i) => {
+            const statusEl = div.querySelector('.status');
+            const name = this.laeufer[i];
+            if (this.status.laeufer[name] === 'bereit') {
+                statusEl.textContent = '● bereit';
+                statusEl.style.color = '#4ff';
+            } else {
+                statusEl.textContent = '● inaktiv';
+                statusEl.style.color = '#666';
+            }
+        });
+
+        // Felder
+        const feldDivs = document.querySelectorAll('#felder .feld');
+        feldDivs.forEach((div, i) => {
+            const statusEl = div.querySelector('.status');
+            const name = this.felder[i];
+            if (this.status.felder[name] === 'bereit') {
+                statusEl.textContent = '● bereit';
+                statusEl.style.color = '#ff4';
+            } else {
+                statusEl.textContent = '● inaktiv';
+                statusEl.style.color = '#666';
+            }
+        });
+
+        // Count
+        const active = Object.values(this.status.stationen).filter(s => s === 'aktiv').length +
+                       Object.values(this.status.laeufer).filter(l => l === 'bereit').length +
+                       Object.values(this.status.felder).filter(f => f === 'bereit').length;
+        document.getElementById('module-count').textContent = active;
+    }
+};
+
+// ─── RICHTER ──────────────────────────────────────────────────
+const RICHTER = {
+    energie: 0,
+    zustand: 'idle',
+
+    bewerte() {
+        // Simulierte Triolets aus den Stationen
+        const triolets = [
+            { gewicht: 2 }, { gewicht: 3 }, { gewicht: 1 },
+            { gewicht: 2 }, { gewicht: 3 }, { gewicht: 1 }
+        ];
+        this.energie = 0;
+        for (const t of triolets) {
+            this.energie += t.gewicht * 0.618;
+        }
+        this.zustand = this.energie > 10 ? 'hoch' : 'niedrig';
+        return this.energie;
+    }
+};
+
+// ─── DOM ──────────────────────────────────────────────────────
+const logDiv = document.getElementById('log');
+const run3Out = document.getElementById('run3-out');
+const energieWert = document.getElementById('energie-wert');
+const zustandWert = document.getElementById('zustand-wert');
+const adminStatus = document.getElementById('admin-status');
+const statusLed = document.getElementById('status-led');
+
+// ─── LOG ──────────────────────────────────────────────────────
+function log(msg, type = 'ok') {
+    const entry = document.createElement('div');
+    entry.className = 'entry';
+    const time = new Date().toLocaleTimeString();
+    const cls = type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : '';
+    entry.innerHTML = `<span class="time">[${time}]</span> <span class="msg ${cls}">${msg}</span>`;
+    logDiv.appendChild(entry);
+    logDiv.scrollTop = logDiv.scrollHeight;
+    while (logDiv.children.length > 30) logDiv.removeChild(logDiv.firstChild);
+}
+
+// ─── RUN ──────────────────────────────────────────────────────
+function run3exe() {
+    const out = RUN3.start();
+    run3Out.textContent = JSON.stringify(out, null, 2);
+    RUN3.updateUI();
+    document.getElementById('status-led').style.color = '#4f4';
+    log('▶ RUN‑3 gestartet — Alle Stationen aktiv', 'ok');
+}
+
+// ─── RICHTER ──────────────────────────────────────────────────
+function richterExe() {
+    const energie = RICHTER.bewerte();
+    energieWert.textContent = energie.toFixed(2);
+    zustandWert.textContent = RICHTER.zustand;
+    adminStatus.textContent = `● ${RICHTER.zustand}`;
+    log(`⚡ RICHTER: Energie = ${energie.toFixed(2)} · ${RICHTER.zustand}`, 'ok');
+}
+
+// ─── RESET ────────────────────────────────────────────────────
+function resetAll() {
+    RUN3.status.stationen = {};
+    RUN3.status.laeufer = {};
+    RUN3.status.felder = {};
+    for (const s of RUN3.stationen) RUN3.status.stationen[s] = 'inaktiv';
+    for (const l of RUN3.laeufer) RUN3.status.laeufer[l] = 'inaktiv';
+    for (const f of RUN3.felder) RUN3.status.felder[f] = 'inaktiv';
+    RUN3.updateUI();
+    run3Out.textContent = '⟲ RESET';
+    document.getElementById('status-led').style.color = '#f44';
+    energieWert.textContent = '0';
+    zustandWert.textContent = 'idle';
+    adminStatus.textContent = '● reset';
+    log('⟲ RESET — Alle Stationen zurückgesetzt', 'warn');
+}
+
+// ─── EVENTS ──────────────────────────────────────────────────
+document.getElementById('btn-run').addEventListener('click', run3exe);
+document.getElementById('btn-richter').addEventListener('click', richterExe);
+document.getElementById('btn-reset').addEventListener('click', resetAll);
+
+// ─── TASTATUR ──────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'r' || e.key === 'R') document.getElementById('btn-run').click();
+    if (e.key === 'x' || e.key === 'X') document.getElementById('btn-richter').click();
+    if (e.key === ' ') { e.preventDefault(); document.getElementById('btn-run').click(); }
+});
+
+// ─── UHR ──────────────────────────────────────────────────────
+function updateClock() {
+    document.getElementById('clock').textContent = `⏱️ ${new Date().toLocaleTimeString()}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── INIT ────────────────────────────────────────────────────
+log('⚡ EVOCITY · RUN‑3 · COCKPIT geladen', 'ok');
+log(`📦 ${RUN3.stationen.length + RUN3.laeufer.length + RUN3.felder.length} Module integriert`, 'ok');
+log('⌨️  r=RUN‑3  x=Richter  space=Start', 'ok');
+
+RUN3.updateUI();
+adminStatus.textContent = '● bereit';
+
+console.log('⚡ EVOCITY · RUN‑3 · COCKPIT');
+console.log(`📦 ${RUN3.stationen.length + RUN3.laeufer.length + RUN3.felder.length} Module`);
+console.log('⌨️  r=RUN‑3  x=Richter  space=Start');
+
+// Auto-RUN nach 1 Sekunde
+setTimeout(() => {
+    log('🔄 Auto-RUN aktiv — starte...', 'warn');
+    run3exe();
+}, 1000);
+</script>
+
+</body>
+</html>
