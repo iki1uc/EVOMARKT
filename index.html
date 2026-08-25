@@ -2,414 +2,641 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>EVOCITY · RUN‑3 · COCKPIT · ALLE STATIONEN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌀 WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND</title>
 
 <style>
+:root {
+    --bg: #0a0a12;
+    --fg: #0ff;
+    --gold: #ffd700;
+    --evomind: #ff00ff;
+    --noah: #ffd700;
+    --markt: #00ff88;
+    --boerse: #ff6600;
+    --industrie: #66ccff;
+    --wette: #ff4444;
+    --slide: #ffaa00;
+    --score: #ffd700;
+    --seele: #ff66ff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
 body {
-    background: #000;
-    color: #0f0;
+    background: var(--bg);
+    color: var(--fg);
     font-family: 'Consolas', monospace;
-    padding: 20px;
     min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 12px;
+    padding: 10px;
 }
-
-header {
-    border-bottom: 2px solid #ffd700;
-    padding-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-header h1 {
-    font-size: 20px;
-    color: #ffd700;
-    letter-spacing: 3px;
-}
-#clock { font-size: 12px; color: #666; }
-
-main {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 12px;
-}
-
-#pipeline {
-    background: #0a0a12;
-    border: 1px solid #1a1a2a;
-    border-radius: 10px;
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: rgba(10,10,20,0.7);
+    border: 1px solid rgba(255,170,0,0.05);
+    border-radius: 16px;
     padding: 16px;
+    backdrop-filter: blur(10px);
 }
-
-.station-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-.station {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 6px;
-    padding: 8px;
+.header {
     text-align: center;
+    border-bottom: 1px solid rgba(255,170,0,0.05);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
 }
-.station .name { color: #ffd700; font-weight: bold; }
-.station .status { color: #4f4; font-size: 9px; }
-.station .status.inactive { color: #666; }
-
-.laeufer-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-    margin-bottom: 10px;
+.header h1 {
+    font-size: 28px;
+    background: linear-gradient(90deg, #ff00ff, #ffd700, #00ff88, #ff6600, #66ccff, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 4px;
 }
-.laeufer {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 6px;
-    padding: 8px;
-    text-align: center;
-}
-.laeufer .name { color: #4f4; font-weight: bold; }
-.laeufer .status { color: #4ff; font-size: 9px; }
-
-.feld-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-}
-.feld {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 6px;
-    padding: 8px;
-    text-align: center;
-}
-.feld .name { color: #f4f; font-weight: bold; }
-.feld .status { color: #ff4; font-size: 9px; }
-
-#panel {
-    background: #0a0a12;
-    border: 1px solid #1a1a2a;
-    border-radius: 10px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-#panel h3 { color: #666; font-size: 11px; border-bottom: 1px solid #1a1a2a; padding-bottom: 6px; }
-
-#log {
-    flex: 1;
-    overflow-y: auto;
-    font-size: 9px;
-    color: #6a6a8a;
-    line-height: 1.4;
-    max-height: 200px;
-    background: #06060a;
-    border-radius: 4px;
-    padding: 6px;
-}
-
-#log .entry { padding: 1px 0; border-bottom: 1px solid #0a0a12; }
-#log .time { color: #444; }
-#log .msg.ok { color: #4f4; }
-#log .msg.warn { color: #ff4; }
-
-.console {
-    background: #111;
-    border: 1px solid #333;
-    padding: 12px;
+.header .sub {
+    color: #445555;
     font-size: 11px;
-    white-space: pre-wrap;
-    min-height: 60px;
-    border-radius: 4px;
-    color: #0f0;
+    letter-spacing: 2px;
 }
+.header .sub span { color: var(--gold); }
 
-button {
-    background: #111;
-    color: #0f0;
-    border: 1px solid #333;
-    padding: 6px 14px;
-    border-radius: 4px;
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+@media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+
+.panel {
+    background: rgba(10,10,20,0.4);
+    border: 1px solid rgba(255,255,255,0.02);
+    border-radius: 12px;
+    padding: 12px;
+}
+.panel h2 {
+    color: var(--gold);
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+.panel button {
+    background: rgba(20,35,35,0.2);
+    color: #668888;
+    border: 1px solid rgba(255,255,255,0.02);
+    padding: 4px 12px;
+    border-radius: 16px;
     cursor: pointer;
     font-family: inherit;
-    font-size: 10px;
-    transition: all 0.2s;
+    font-size: 9px;
+    transition: all 0.3s;
+    margin: 2px;
 }
-button:hover { border-color: #ffd700; background: #1a1a2a; }
-button.primary { border-color: #ffd700; color: #ffd700; }
-button.primary:hover { background: #ffd700; color: #000; }
+.panel button:hover { background: rgba(40,80,70,0.08); color: #aaeedd; }
+.panel button.gold { color: var(--gold); border-color: rgba(255,170,0,0.05); }
+.panel button.red { color: #ff4444; border-color: rgba(255,68,68,0.05); }
+.panel button.green { color: var(--fg); border-color: rgba(0,255,136,0.05); }
+.panel button.evomind { color: var(--evomind); border-color: rgba(255,0,255,0.05); }
+.panel button.noah { color: var(--noah); border-color: rgba(255,215,0,0.05); }
+.panel button.markt { color: var(--markt); border-color: rgba(0,255,136,0.05); }
+.panel button.boerse { color: var(--boerse); border-color: rgba(255,102,0,0.05); }
+.panel button.industrie { color: var(--industrie); border-color: rgba(102,204,255,0.05); }
+.panel button.wette { color: var(--wette); border-color: rgba(255,68,68,0.05); }
+.panel button.slide { color: var(--slide); border-color: rgba(255,170,0,0.05); }
+.panel button.score { color: var(--score); border-color: rgba(255,215,0,0.05); }
+.panel button.seele { color: var(--seele); border-color: rgba(255,102,255,0.05); }
 
-.cockpit-grid {
+#output {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 60px;
+    font-size: 10px;
+    line-height: 1.4;
+    border: 1px solid rgba(255,255,255,0.02);
+    margin-top: 8px;
+    white-space: pre-wrap;
+    color: #88ddbb;
+    font-family: monospace;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.status {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 10px;
+    margin-top: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    font-size: 9px;
+    color: #445555;
+    border: 1px solid rgba(255,255,255,0.01);
+    flex-wrap: wrap;
+}
+.status span { color: #88ddbb; }
+
+.footer {
+    text-align: center;
+    margin-top: 12px;
+    padding: 10px;
+    color: #222;
+    font-size: 8px;
+    letter-spacing: 2px;
+    border-top: 1px solid rgba(255,255,255,0.01);
+}
+.footer span { color: var(--gold); }
+
+.board-6x9x9 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 4px;
+    margin-top: 6px;
+}
+.ebene {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 4px;
+    padding: 4px;
+    text-align: center;
+    font-size: 7px;
+    color: #666;
+}
+.ebene .level { color: var(--gold); font-weight: bold; font-size: 10px; }
+.ebene .feld { color: #88ddbb; font-size: 6px; }
+.ebene.active { border-color: var(--fg); background: #0f1a1a; }
+
+.figuren-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 4px;
-    font-size: 9px;
+    margin-top: 6px;
+}
+.figur {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 4px;
+    padding: 4px;
+    text-align: center;
+    font-size: 8px;
     color: #666;
+}
+.figur .name { color: var(--gold); font-weight: bold; }
+.figur .rolle { color: #88ddbb; font-size: 6px; }
+.figur .wert { color: var(--fg); font-size: 10px; }
+.figur.active { border-color: var(--evomind); background: rgba(255,0,255,0.05); }
+.figur.spieler1 { border-color: #00ff88; }
+.figur.spieler2 { border-color: #ff6600; }
+.figur.spieler3 { border-color: #66ccff; }
+.figur.spieler4 { border-color: #ff66ff; }
+
+.respo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
     margin-top: 6px;
 }
-.cockpit-grid .wert { color: #0f0; }
-.cockpit-grid .gold { color: #ffd700; }
+.respo-item {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 4px;
+    padding: 4px;
+    text-align: center;
+    font-size: 7px;
+    color: #666;
+}
+.respo-item .wert { color: var(--gold); font-weight: bold; }
+.respo-item .label { color: #88ddbb; font-size: 6px; }
+.respo-item.active { border-color: var(--evomind); background: rgba(255,0,255,0.05); }
 
-#controls {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
+.seele-box {
+    background: #0e0e1a;
+    border: 1px solid #1a1a2a;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    font-size: 9px;
+    color: #88ddbb;
+    min-height: 40px;
     margin-top: 6px;
 }
-
-@media (max-width: 800px) {
-    main { grid-template-columns: 1fr; }
-}
+.seele-box .title { color: var(--gold); font-weight: bold; }
+.seele-box .content { color: var(--seele); font-size: 14px; margin-top: 2px; }
 </style>
 </head>
 <body>
 
-<header>
-    <h1>⚡ EVOCITY · RUN‑3 · COCKPIT</h1>
-    <div>
-        <span id="clock">⏱️ --:--:--</span>
-        <span style="margin-left:12px;color:#666;" id="cycle-count">Zyklus 0</span>
-    </div>
-</header>
+<div class="container">
 
-<main>
-    <div id="pipeline">
-        <h2 style="color:#6cf;font-size:14px;margin-bottom:8px;">📐 PIPELINE · RUN‑3</h2>
+<div class="header">
+    <h1>🌀 WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND</h1>
+    <div class="sub">Markt · Börse · Industrie · <span>Wette · Slide · Score · Seele</span></div>
+</div>
 
-        <!-- Stationen -->
-        <div style="font-size:9px;color:#666;margin-bottom:4px;">🔺 STATIONEN</div>
-        <div class="station-group" id="stationen">
-            <div class="station"><div class="name">XyX</div><div class="status">● aktiv</div></div>
-            <div class="station"><div class="name">AIR</div><div class="status">● aktiv</div></div>
-            <div class="station"><div class="name">AIV</div><div class="status">● aktiv</div></div>
+<div class="grid">
+
+    <!-- ===== PANEL 1: BOARD · 6×9×9 ===== -->
+    <div class="panel">
+        <h2>🌀 6×9×9 · WIRTSCHAFTS-BRETT</h2>
+        <button class="gold" onclick="nextEbene()">⏭ EBENE WECHSELN</button>
+        <button class="evomind" onclick="resetBoard()">⟲ RESET</button>
+
+        <div class="board-6x9x9" id="board-6x9x9">
+            <div class="ebene active"><div class="level">1</div><div class="feld">Markt · 81</div></div>
+            <div class="ebene"><div class="level">2</div><div class="feld">Börse · 81</div></div>
+            <div class="ebene"><div class="level">3</div><div class="feld">Industrie · 81</div></div>
+            <div class="ebene"><div class="level">4</div><div class="feld">Wette · 81</div></div>
+            <div class="ebene"><div class="level">5</div><div class="feld">Slide · 81</div></div>
+            <div class="ebene"><div class="level">6</div><div class="feld">Score · 81</div></div>
         </div>
 
-        <!-- Läufer -->
-        <div style="font-size:9px;color:#666;margin-bottom:4px;">🌀 LÄUFER</div>
-        <div class="laeufer-group" id="laeufer">
-            <div class="laeufer"><div class="name">NC.in</div><div class="status">● bereit</div></div>
-            <div class="laeufer"><div class="name">NC.out</div><div class="status">● bereit</div></div>
-            <div class="laeufer"><div class="name">NC.mid</div><div class="status">● bereit</div></div>
+        <div id="board-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
+            Ebene 1 · Markt · 81 Felder · 9×9
         </div>
 
-        <!-- Felder -->
-        <div style="font-size:9px;color:#666;margin-bottom:4px;">◈ FELDER</div>
-        <div class="feld-group" id="felder">
-            <div class="feld"><div class="name">NC.feld</div><div class="status">● bereit</div></div>
-            <div class="feld"><div class="name">NC.warp</div><div class="status">● bereit</div></div>
-            <div class="feld"><div class="name">NC.core</div><div class="status">● bereit</div></div>
-        </div>
-
-        <!-- Cockpit-Richter -->
-        <div class="cockpit-grid">
-            <div>Energie: <span class="gold" id="energie-wert">0</span></div>
-            <div>Zustand: <span class="wert" id="zustand-wert">idle</span></div>
-            <div>Admin: <span class="wert" id="admin-status">● bereit</span></div>
-        </div>
-
-        <div id="controls">
-            <button class="primary" id="btn-run">▶ RUN‑3</button>
-            <button id="btn-richter">⚡ RICHTER</button>
-            <button id="btn-reset">⟲ RESET</button>
-        </div>
-
-        <div class="console" id="run3-out">Bereit für RUN‑3…</div>
-    </div>
-
-    <div id="panel">
-        <h3>📊 STATUS</h3>
-        <div id="log">
-            <div class="entry"><span class="time">[INIT]</span> <span class="msg ok">⚡ EVOCITY · RUN‑3 · COCKPIT</span></div>
-        </div>
-        <div style="display:flex;gap:10px;font-size:9px;color:#666;border-top:1px solid #1a1a2a;padding-top:6px;">
-            <span>🔴 <span id="status-led" style="color:#4f4;">●</span> bereit</span>
-            <span>📦 <span id="module-count">0</span>/9 aktiv</span>
+        <div class="seele-box" id="seele-output">
+            <div class="title">🌀 SEELE · EINTAUCHEN</div>
+            <div class="content">✨ Wähle einen Spieler · Tauche ein in den Markt</div>
         </div>
     </div>
-</main>
+
+    <!-- ===== PANEL 2: FIGUREN · SPIELER ===== -->
+    <div class="panel">
+        <h2>🎭 9 ANIME-FIGUREN · 2–4 SPIELER</h2>
+        <button class="noah" onclick="setSpieler(1)">👤 SPIELER 1</button>
+        <button class="markt" onclick="setSpieler(2)">👤 SPIELER 2</button>
+        <button class="boerse" onclick="setSpieler(3)">👤 SPIELER 3</button>
+        <button class="industrie" onclick="setSpieler(4)">👤 SPIELER 4</button>
+
+        <div class="figuren-grid" id="figuren-grid">
+            <div class="figur spieler1 active"><div class="name">⚡ NOAH</div><div class="rolle">Kaiser · Markt</div><div class="wert">100</div></div>
+            <div class="figur spieler2"><div class="name">🌀 EVOMIND</div><div class="rolle">Engine · RESPO</div><div class="wert">80</div></div>
+            <div class="figur spieler3"><div class="name">🏛️ ATLANTIS</div><div class="rolle">Industrie</div><div class="wert">60</div></div>
+            <div class="figur spieler4"><div class="name">🌆 EVOCITY</div><div class="rolle">Börse</div><div class="wert">70</div></div>
+            <div class="figur"><div class="name">🌀 EVOTAAL</div><div class="rolle">Meta-Raum</div><div class="wert">50</div></div>
+            <div class="figur"><div class="name">🌐 NC</div><div class="rolle">Netzwerk</div><div class="wert">65</div></div>
+            <div class="figur"><div class="name">💰 EARN</div><div class="rolle">Verdienst</div><div class="wert">55</div></div>
+            <div class="figur"><div class="name">🧑‍🏫 COACH</div><div class="rolle">Führung</div><div class="wert">45</div></div>
+            <div class="figur"><div class="name">🎲 WETTE</div><div class="rolle">Risiko</div><div class="wert">35</div></div>
+        </div>
+
+        <div id="figur-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
+            👤 Spieler 1 · NOAH · 100 · ⚡ Kaiser des Marktes
+        </div>
+    </div>
+
+</div>
+
+<div class="grid" style="margin-top:10px;">
+
+    <!-- ===== PANEL 3: RESPO EVOMIND · ENGINE ===== -->
+    <div class="panel">
+        <h2>🧠 RESPO EVOMIND · ENGINE</h2>
+        <button class="evomind" onclick="runEvomind()">🌀 EVOMIND STARTEN</button>
+        <button class="gold" onclick="runEngine()">⚡ ENGINE PULSE</button>
+        <button class="score" onclick="runScore()">📊 SCORE</button>
+
+        <div class="respo-grid" id="respo-grid">
+            <div class="respo-item active"><div class="wert">27</div><div class="label">EVOMIND</div></div>
+            <div class="respo-item"><div class="wert">27</div><div class="label">RESPO-1</div></div>
+            <div class="respo-item"><div class="wert">27</div><div class="label">RESPO-2</div></div>
+        </div>
+
+        <div id="evomind-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
+            🧠 EVOMIND · RESPO 27×3 = 81 · Engine bereit
+        </div>
+    </div>
+
+    <!-- ===== PANEL 4: WETTE · SLIDE · SCORE ===== -->
+    <div class="panel">
+        <h2>🎲 WETTE · 📐 SLIDE · 📊 SCORE</h2>
+        <button class="wette" onclick="setWette()">🎲 WETTE</button>
+        <button class="slide" onclick="setSlide()">📐 SLIDE</button>
+        <button class="score" onclick="setScore()">📊 SCORE</button>
+        <button class="gold" onclick="setMarktMove()">📈 MARKT-BEWEGUNG</button>
+        <button class="boerse" onclick="setBoerseMove()">📊 BÖRSE-BEWEGUNG</button>
+        <button class="industrie" onclick="setIndustrieMove()">🏭 INDUSTRIE-BEWEGUNG</button>
+
+        <div id="wette-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
+            🎲 WETTE: 2:1 · 📐 SLIDE: aktiv · 📊 SCORE: 0.87
+        </div>
+    </div>
+
+</div>
+
+<div class="grid" style="margin-top:10px;">
+
+    <!-- ===== PANEL 5: INDUSTRIE · VIRTUELLER MARKTPLATZ ===== -->
+    <div class="panel">
+        <h2>🏭 INDUSTRIE · VIRTUELLER MARKTPLATZ</h2>
+        <button class="industrie" onclick="setIndustrie()">🏭 INDUSTRIE</button>
+        <button class="markt" onclick="setMarktplatz()">🏪 MARKTPLATZ</button>
+        <button class="noah" onclick="setNoahMarkt()">👑 NOAH · MARKT</button>
+
+        <div id="industrie-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
+            🏭 Industrie · 🏪 Marktplatz · 👑 NOAH · bereit
+        </div>
+    </div>
+
+    <!-- ===== PANEL 6: SPIELER · SEELE ===== -->
+    <div class="panel">
+        <h2>🌀 SEELE · EINTAUCHEN</h2>
+        <button class="seele" onclick="tauchEin(1)">🌀 SPIELER 1</button>
+        <button class="seele" onclick="tauchEin(2)">🌀 SPIELER 2</button>
+        <button class="seele" onclick="tauchEin(3)">🌀 SPIELER 3</button>
+        <button class="seele" onclick="tauchEin(4)">🌀 SPIELER 4</button>
+        <button class="gold" onclick="tauchEin(0)">🌀 ALLE</button>
+
+        <div id="seele-status" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
+            🌀 Seele wartet auf Eintauchen...
+        </div>
+    </div>
+
+</div>
+
+<div class="status">
+    <span>🌀 EBENE: <span id="status-ebene">1</span></span>
+    <span>🧠 EVOMIND: <span id="status-evomind">aktiv</span></span>
+    <span>👤 SPIELER: <span id="status-spieler">1</span></span>
+    <span>📊 SCORE: <span id="status-score">0.87</span></span>
+    <span>🎲 WETTE: <span id="status-wette">2:1</span></span>
+</div>
+
+<div class="footer"><span>🌀</span> WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND · <span>wieimmer4u</span></div>
+
+</div>
 
 <script>
 // ============================================================
-// EVOCITY · RUN‑3 · COCKPIT · ALLE STATIONEN
+// WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND
 // ============================================================
 
-// ─── RUN‑3 KERN ──────────────────────────────────────────────
-const RUN3 = {
-    stationen: ["XyX", "AIR", "AIV"],
-    laeufer: ["NC.in", "NC.out", "NC.mid"],
-    felder: ["NC.feld", "NC.warp", "NC.core"],
-
-    status: {
-        stationen: {},
-        laeufer: {},
-        felder: {}
-    },
-
-    start() {
-        // Alle Stationen aktivieren
-        for (const s of this.stationen) {
-            this.status.stationen[s] = 'aktiv';
-        }
-        for (const l of this.laeufer) {
-            this.status.laeufer[l] = 'bereit';
-        }
-        for (const f of this.felder) {
-            this.status.felder[f] = 'bereit';
-        }
-
-        return {
-            pipeline: "Pipelineblitz‑RUN‑3",
-            stationen: this.stationen.map(s => ({ name: s, status: this.status.stationen[s] })),
-            laeufer: this.laeufer.map(l => ({ name: l, status: this.status.laeufer[l] })),
-            felder: this.felder.map(f => ({ name: f, status: this.status.felder[f] })),
-            status: "OK",
-            stamp: Date.now()
-        };
-    },
-
-    updateUI() {
-        // Stationen
-        const stationDivs = document.querySelectorAll('#stationen .station');
-        stationDivs.forEach((div, i) => {
-            const statusEl = div.querySelector('.status');
-            const name = this.stationen[i];
-            if (this.status.stationen[name] === 'aktiv') {
-                statusEl.textContent = '● aktiv';
-                statusEl.style.color = '#4f4';
-            } else {
-                statusEl.textContent = '● inaktiv';
-                statusEl.style.color = '#666';
-            }
-        });
-
-        // Läufer
-        const laeuferDivs = document.querySelectorAll('#laeufer .laeufer');
-        laeuferDivs.forEach((div, i) => {
-            const statusEl = div.querySelector('.status');
-            const name = this.laeufer[i];
-            if (this.status.laeufer[name] === 'bereit') {
-                statusEl.textContent = '● bereit';
-                statusEl.style.color = '#4ff';
-            } else {
-                statusEl.textContent = '● inaktiv';
-                statusEl.style.color = '#666';
-            }
-        });
-
-        // Felder
-        const feldDivs = document.querySelectorAll('#felder .feld');
-        feldDivs.forEach((div, i) => {
-            const statusEl = div.querySelector('.status');
-            const name = this.felder[i];
-            if (this.status.felder[name] === 'bereit') {
-                statusEl.textContent = '● bereit';
-                statusEl.style.color = '#ff4';
-            } else {
-                statusEl.textContent = '● inaktiv';
-                statusEl.style.color = '#666';
-            }
-        });
-
-        // Count
-        const active = Object.values(this.status.stationen).filter(s => s === 'aktiv').length +
-                       Object.values(this.status.laeufer).filter(l => l === 'bereit').length +
-                       Object.values(this.status.felder).filter(f => f === 'bereit').length;
-        document.getElementById('module-count').textContent = active;
-    }
+// ─── STATE ────────────────────────────────────────────────────
+const state = {
+    ebene: 1,
+    spieler: 1,
+    score: 0.87,
+    wette: '2:1',
+    slide: true,
+    evomind: 'aktiv',
+    markt: 0,
+    boerse: 0,
+    industrie: 0,
+    seele: null,
+    figuren: [
+        { name: 'NOAH', rolle: 'Kaiser · Markt', wert: 100, spieler: 1 },
+        { name: 'EVOMIND', rolle: 'Engine · RESPO', wert: 80, spieler: 2 },
+        { name: 'ATLANTIS', rolle: 'Industrie', wert: 60, spieler: 3 },
+        { name: 'EVOCITY', rolle: 'Börse', wert: 70, spieler: 4 },
+        { name: 'EVOTAAL', rolle: 'Meta-Raum', wert: 50, spieler: 0 },
+        { name: 'NC', rolle: 'Netzwerk', wert: 65, spieler: 0 },
+        { name: 'EARN', rolle: 'Verdienst', wert: 55, spieler: 0 },
+        { name: 'COACH', rolle: 'Führung', wert: 45, spieler: 0 },
+        { name: 'WETTE', rolle: 'Risiko', wert: 35, spieler: 0 }
+    ]
 };
 
-// ─── RICHTER ──────────────────────────────────────────────────
-const RICHTER = {
-    energie: 0,
-    zustand: 'idle',
+// ─── DOM UPDATES ────────────────────────────────────────────
+function updateUI() {
+    document.getElementById('status-ebene').textContent = state.ebene;
+    document.getElementById('status-spieler').textContent = state.spieler;
+    document.getElementById('status-score').textContent = state.score.toFixed(2);
+    document.getElementById('status-wette').textContent = state.wette;
 
-    bewerte() {
-        // Simulierte Triolets aus den Stationen
-        const triolets = [
-            { gewicht: 2 }, { gewicht: 3 }, { gewicht: 1 },
-            { gewicht: 2 }, { gewicht: 3 }, { gewicht: 1 }
-        ];
-        this.energie = 0;
-        for (const t of triolets) {
-            this.energie += t.gewicht * 0.618;
-        }
-        this.zustand = this.energie > 10 ? 'hoch' : 'niedrig';
-        return this.energie;
-    }
-};
+    // Ebenen
+    const ebeneEls = document.querySelectorAll('.ebene');
+    ebeneEls.forEach((el, i) => {
+        el.classList.toggle('active', i + 1 === state.ebene);
+    });
 
-// ─── DOM ──────────────────────────────────────────────────────
-const logDiv = document.getElementById('log');
-const run3Out = document.getElementById('run3-out');
-const energieWert = document.getElementById('energie-wert');
-const zustandWert = document.getElementById('zustand-wert');
-const adminStatus = document.getElementById('admin-status');
-const statusLed = document.getElementById('status-led');
+    // Figuren
+    const figEls = document.querySelectorAll('.figur');
+    figEls.forEach((el, i) => {
+        const fig = state.figuren[i];
+        el.classList.remove('spieler1', 'spieler2', 'spieler3', 'spieler4');
+        if (fig.spieler === 1) el.classList.add('spieler1');
+        else if (fig.spieler === 2) el.classList.add('spieler2');
+        else if (fig.spieler === 3) el.classList.add('spieler3');
+        else if (fig.spieler === 4) el.classList.add('spieler4');
+        el.querySelector('.wert').textContent = fig.wert;
+    });
+}
+
+// ─── PANEL 1: BOARD ──────────────────────────────────────────
+function nextEbene() {
+    state.ebene = (state.ebene % 6) + 1;
+    const labels = ['Markt', 'Börse', 'Industrie', 'Wette', 'Slide', 'Score'];
+    document.getElementById('board-output').textContent =
+        `Ebene ${state.ebene} · ${labels[state.ebene - 1]} · 81 Felder · 9×9`;
+    updateUI();
+    log(`🌀 EBENE ${state.ebene} · ${labels[state.ebene - 1]}`, 'gold');
+}
+
+function resetBoard() {
+    state.ebene = 1;
+    state.markt = 0;
+    state.boerse = 0;
+    state.industrie = 0;
+    document.getElementById('board-output').textContent =
+        '⟲ Board zurückgesetzt · Ebene 1 · Markt · 81 Felder';
+    updateUI();
+    log('⟲ BOARD zurückgesetzt', 'evomind');
+}
+
+// ─── PANEL 2: FIGUREN · SPIELER ─────────────────────────────
+function setSpieler(num) {
+    state.spieler = num;
+    const namen = ['', 'NOAH', 'EVOMIND', 'ATLANTIS', 'EVOCITY'];
+    const rollen = ['', 'Kaiser · Markt', 'Engine · RESPO', 'Industrie', 'Börse'];
+    const werte = [0, 100, 80, 60, 70];
+    document.getElementById('figur-output').textContent =
+        `👤 Spieler ${num} · ${namen[num]} · ${werte[num]} · ${rollen[num]}`;
+    updateUI();
+    log(`👤 SPIELER ${num} · ${namen[num]}`, 'noah');
+
+    // Seele eintauchen
+    tauchEin(num);
+}
+
+// ─── PANEL 3: RESPO EVOMIND ──────────────────────────────────
+function runEvomind() {
+    state.evomind = 'aktiv';
+    document.getElementById('evomind-output').textContent =
+        '🧠 EVOMIND · RESPO 27×3 = 81\n' +
+        '🌀 Engine aktiv · 6 Ebenen · 9×9\n' +
+        '📊 Markt · Börse · Industrie · Wette · Slide · Score';
+    log('🌀 EVOMIND gestartet', 'evomind');
+}
+
+function runEngine() {
+    state.markt = Math.min(100, state.markt + 5 + Math.random() * 10);
+    state.boerse = Math.min(100, state.boerse + 5 + Math.random() * 10);
+    state.industrie = Math.min(100, state.industrie + 5 + Math.random() * 10);
+    document.getElementById('evomind-output').textContent =
+        `⚡ ENGINE PULSE\n` +
+        `📈 Markt: ${state.markt.toFixed(0)}\n` +
+        `📊 Börse: ${state.boerse.toFixed(0)}\n` +
+        `🏭 Industrie: ${state.industrie.toFixed(0)}`;
+    log('⚡ ENGINE PULSE', 'gold');
+}
+
+function runScore() {
+    state.score = Math.min(1, state.score + 0.05 + Math.random() * 0.1);
+    const fig = state.figuren.find(f => f.spieler === state.spieler);
+    if (fig) fig.wert = Math.min(150, fig.wert + 5 + Math.random() * 10);
+    document.getElementById('evomind-output').textContent =
+        `📊 SCORE: ${state.score.toFixed(2)}\n` +
+        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}`;
+    updateUI();
+    log(`📊 SCORE: ${state.score.toFixed(2)}`, 'score');
+}
+
+// ─── PANEL 4: WETTE · SLIDE · SCORE ──────────────────────────
+function setWette() {
+    const quoten = ['2:1', '3:1', '5:2', '1:1', '4:1'];
+    state.wette = quoten[Math.floor(Math.random() * quoten.length)];
+    document.getElementById('wette-output').innerHTML =
+        `🎲 WETTE: ${state.wette}\n` +
+        `📐 SLIDE: ${state.slide ? 'aktiv' : 'inaktiv'}\n` +
+        `📊 SCORE: ${state.score.toFixed(2)}`;
+    updateUI();
+    log(`🎲 WETTE: ${state.wette}`, 'wette');
+}
+
+function setSlide() {
+    state.slide = !state.slide;
+    document.getElementById('wette-output').innerHTML =
+        `📐 SLIDE: ${state.slide ? 'aktiv' : 'inaktiv'}\n` +
+        `🎲 WETTE: ${state.wette}\n` +
+        `📊 SCORE: ${state.score.toFixed(2)}`;
+    log(`📐 SLIDE ${state.slide ? 'aktiviert' : 'deaktiviert'}`, 'slide');
+}
+
+function setScore() {
+    state.score = Math.min(1, state.score + 0.1 + Math.random() * 0.15);
+    const fig = state.figuren.find(f => f.spieler === state.spieler);
+    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 15);
+    document.getElementById('wette-output').innerHTML =
+        `📊 SCORE: ${state.score.toFixed(2)}\n` +
+        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
+        `🎲 WETTE: ${state.wette}\n` +
+        `📐 SLIDE: ${state.slide ? 'aktiv' : 'inaktiv'}`;
+    updateUI();
+    log(`📊 SCORE: ${state.score.toFixed(2)}`, 'score');
+}
+
+function setMarktMove() {
+    state.markt = Math.min(100, state.markt + 10 + Math.random() * 20);
+    const fig = state.figuren.find(f => f.spieler === state.spieler);
+    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 20);
+    document.getElementById('wette-output').innerHTML =
+        `📈 MARKT-BEWEGUNG\n` +
+        `Markt: ${state.markt.toFixed(0)}\n` +
+        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
+        `📊 SCORE: ${state.score.toFixed(2)}`;
+    updateUI();
+    log(`📈 MARKT-BEWEGUNG · ${state.markt.toFixed(0)}`, 'markt');
+}
+
+function setBoerseMove() {
+    state.boerse = Math.min(100, state.boerse + 10 + Math.random() * 20);
+    const fig = state.figuren.find(f => f.spieler === state.spieler);
+    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 20);
+    document.getElementById('wette-output').innerHTML =
+        `📊 BÖRSE-BEWEGUNG\n` +
+        `Börse: ${state.boerse.toFixed(0)}\n` +
+        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
+        `📊 SCORE: ${state.score.toFixed(2)}`;
+    updateUI();
+    log(`📊 BÖRSE-BEWEGUNG · ${state.boerse.toFixed(0)}`, 'boerse');
+}
+
+function setIndustrieMove() {
+    state.industrie = Math.min(100, state.industrie + 10 + Math.random() * 20);
+    const fig = state.figuren.find(f => f.spieler === state.spieler);
+    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 20);
+    document.getElementById('wette-output').innerHTML =
+        `🏭 INDUSTRIE-BEWEGUNG\n` +
+        `Industrie: ${state.industrie.toFixed(0)}\n` +
+        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
+        `📊 SCORE: ${state.score.toFixed(2)}`;
+    updateUI();
+    log(`🏭 INDUSTRIE-BEWEGUNG · ${state.industrie.toFixed(0)}`, 'industrie');
+}
+
+// ─── PANEL 5: INDUSTRIE · MARKTPLATZ ─────────────────────────
+function setIndustrie() {
+    document.getElementById('industrie-output').textContent =
+        '🏭 INDUSTRIE\n' +
+        `Produktion: ${state.industrie.toFixed(0)}\n` +
+        'Arbeitsplätze: 243\n' +
+        '6 Ebenen · 9×9 · 81 Felder pro Ebene';
+    log('🏭 INDUSTRIE aktiviert', 'industrie');
+}
+
+function setMarktplatz() {
+    document.getElementById('industrie-output').textContent =
+        '🏪 VIRTUELLER MARKTPLATZ\n' +
+        `Markt: ${state.markt.toFixed(0)}\n` +
+        'Angebote: 81×3 = 243\n' +
+        '👤 Käufer: 4 · Verkäufer: 9';
+    log('🏪 MARKTPLATZ aktiviert', 'markt');
+}
+
+function setNoahMarkt() {
+    document.getElementById('industrie-output').textContent =
+        '👑 NOAH · KAISER DES MARKTES\n' +
+        '📈 Markt: ' + state.markt.toFixed(0) + '\n' +
+        '📊 Börse: ' + state.boerse.toFixed(0) + '\n' +
+        '🏭 Industrie: ' + state.industrie.toFixed(0) + '\n' +
+        '🎲 Wette: ' + state.wette + '\n' +
+        '📐 Slide: ' + (state.slide ? 'aktiv' : 'inaktiv') + '\n' +
+        '📊 Score: ' + state.score.toFixed(2);
+    log('👑 NOAH · MARKT aktiviert', 'noah');
+}
+
+// ─── PANEL 6: SEELE · EINTAUCHEN ────────────────────────────
+function tauchEin(num) {
+    state.seele = num;
+    const namen = ['ALLE', 'NOAH', 'EVOMIND', 'ATLANTIS', 'EVOCITY'];
+    const elemente = ['🌀', '⚡', '🧠', '🏛️', '🌆'];
+    const farben = ['var(--seele)', 'var(--gold)', 'var(--evomind)', 'var(--industrie)', 'var(--boerse)'];
+
+    document.getElementById('seele-status').innerHTML =
+        `🌀 SEELE · EINTAUCHEN\n` +
+        `${elemente[num]} ${namen[num]} · Markt: ${state.markt.toFixed(0)} · Börse: ${state.boerse.toFixed(0)} · Industrie: ${state.industrie.toFixed(0)}\n` +
+        `📊 Score: ${state.score.toFixed(2)} · 🎲 Wette: ${state.wette} · 📐 Slide: ${state.slide ? 'aktiv' : 'inaktiv'}`;
+
+    document.getElementById('seele-output').innerHTML =
+        `<div class="title">🌀 SEELE · EINTAUCHEN</div>` +
+        `<div class="content" style="color:${farben[num]}">${elemente[num]} ${namen[num]} · Tauche ein in den Markt</div>`;
+
+    log(`🌀 SEELE · ${namen[num]} taucht ein`, 'seele');
+}
 
 // ─── LOG ──────────────────────────────────────────────────────
 function log(msg, type = 'ok') {
-    const entry = document.createElement('div');
-    entry.className = 'entry';
+    const output = document.getElementById('output');
     const time = new Date().toLocaleTimeString();
-    const cls = type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : '';
-    entry.innerHTML = `<span class="time">[${time}]</span> <span class="msg ${cls}">${msg}</span>`;
-    logDiv.appendChild(entry);
-    logDiv.scrollTop = logDiv.scrollHeight;
-    while (logDiv.children.length > 30) logDiv.removeChild(logDiv.firstChild);
+    const emoji = {
+        gold: '⚡', evomind: '🌀', noah: '👑', markt: '📈',
+        boerse: '📊', industrie: '🏭', wette: '🎲', slide: '📐',
+        score: '📊', seele: '🌀', 'default': '📌'
+    }[type] || '📌';
+    output.textContent = `[${time}] ${emoji} ${msg}`;
 }
-
-// ─── RUN ──────────────────────────────────────────────────────
-function run3exe() {
-    const out = RUN3.start();
-    run3Out.textContent = JSON.stringify(out, null, 2);
-    RUN3.updateUI();
-    document.getElementById('status-led').style.color = '#4f4';
-    log('▶ RUN‑3 gestartet — Alle Stationen aktiv', 'ok');
-}
-
-// ─── RICHTER ──────────────────────────────────────────────────
-function richterExe() {
-    const energie = RICHTER.bewerte();
-    energieWert.textContent = energie.toFixed(2);
-    zustandWert.textContent = RICHTER.zustand;
-    adminStatus.textContent = `● ${RICHTER.zustand}`;
-    log(`⚡ RICHTER: Energie = ${energie.toFixed(2)} · ${RICHTER.zustand}`, 'ok');
-}
-
-// ─── RESET ────────────────────────────────────────────────────
-function resetAll() {
-    RUN3.status.stationen = {};
-    RUN3.status.laeufer = {};
-    RUN3.status.felder = {};
-    for (const s of RUN3.stationen) RUN3.status.stationen[s] = 'inaktiv';
-    for (const l of RUN3.laeufer) RUN3.status.laeufer[l] = 'inaktiv';
-    for (const f of RUN3.felder) RUN3.status.felder[f] = 'inaktiv';
-    RUN3.updateUI();
-    run3Out.textContent = '⟲ RESET';
-    document.getElementById('status-led').style.color = '#f44';
-    energieWert.textContent = '0';
-    zustandWert.textContent = 'idle';
-    adminStatus.textContent = '● reset';
-    log('⟲ RESET — Alle Stationen zurückgesetzt', 'warn');
-}
-
-// ─── EVENTS ──────────────────────────────────────────────────
-document.getElementById('btn-run').addEventListener('click', run3exe);
-document.getElementById('btn-richter').addEventListener('click', richterExe);
-document.getElementById('btn-reset').addEventListener('click', resetAll);
 
 // ─── TASTATUR ──────────────────────────────────────────────────
+const keys = {
+    '1': () => setSpieler(1), '2': () => setSpieler(2),
+    '3': () => setSpieler(3), '4': () => setSpieler(4),
+    'e': nextEbene, 'r': resetBoard,
+    'v': runEvomind, 'p': runEngine, 's': runScore,
+    'w': setWette, 'l': setSlide, 'c': setScore,
+    'm': setMarktMove, 'b': setBoerseMove, 'i': setIndustrieMove,
+    't': tauchEin, 'a': () => tauchEin(0)
+};
+
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'r' || e.key === 'R') document.getElementById('btn-run').click();
-    if (e.key === 'x' || e.key === 'X') document.getElementById('btn-richter').click();
-    if (e.key === ' ') { e.preventDefault(); document.getElementById('btn-run').click(); }
+    const fn = keys[e.key];
+    if (fn) fn(e);
 });
 
 // ─── UHR ──────────────────────────────────────────────────────
@@ -420,23 +647,10 @@ setInterval(updateClock, 1000);
 updateClock();
 
 // ─── INIT ────────────────────────────────────────────────────
-log('⚡ EVOCITY · RUN‑3 · COCKPIT geladen', 'ok');
-log(`📦 ${RUN3.stationen.length + RUN3.laeufer.length + RUN3.felder.length} Module integriert`, 'ok');
-log('⌨️  r=RUN‑3  x=Richter  space=Start', 'ok');
-
-RUN3.updateUI();
-adminStatus.textContent = '● bereit';
-
-console.log('⚡ EVOCITY · RUN‑3 · COCKPIT');
-console.log(`📦 ${RUN3.stationen.length + RUN3.laeufer.length + RUN3.felder.length} Module`);
-console.log('⌨️  r=RUN‑3  x=Richter  space=Start');
-
-// Auto-RUN nach 1 Sekunde
-setTimeout(() => {
-    log('🔄 Auto-RUN aktiv — starte...', 'warn');
-    run3exe();
-}, 1000);
+updateUI();
+log('🌀 WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND geladen', 'evomind');
+console.log('⌨️  1-4=Spieler  e=Ebene  r=Reset  v=Evomind  p=Engine  s=Score');
+console.log('    w=Wette  l=Slide  c=Score  m=Markt  b=Börse  i=Industrie  t=TauchEin  a=Alle');
 </script>
-
 </body>
 </html>
