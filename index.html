@@ -3,654 +3,549 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌀 WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND</title>
+<title>🌀 EVO MARKT · ENTKORRIGIERCODE · REAL & WAHR</title>
 
 <style>
-:root {
-    --bg: #0a0a12;
-    --fg: #0ff;
-    --gold: #ffd700;
-    --evomind: #ff00ff;
-    --noah: #ffd700;
-    --markt: #00ff88;
-    --boerse: #ff6600;
-    --industrie: #66ccff;
-    --wette: #ff4444;
-    --slide: #ffaa00;
-    --score: #ffd700;
-    --seele: #ff66ff;
-}
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Consolas', monospace;
-    min-height: 100vh;
-    padding: 10px;
+  background: #0a0a12;
+  color: #d0d9e6;
+  font-family: 'Consolas', monospace;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: radial-gradient(ellipse at 50% 0%, #0a0a20, #000000);
 }
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    background: rgba(10,10,20,0.7);
-    border: 1px solid rgba(255,170,0,0.05);
-    border-radius: 16px;
-    padding: 16px;
-    backdrop-filter: blur(10px);
+  max-width: 1400px;
+  width: 100%;
+  background: rgba(10,14,20,0.4);
+  border: 1px solid rgba(0,200,255,0.03);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(6px);
 }
+
 .header {
-    text-align: center;
-    border-bottom: 1px solid rgba(255,170,0,0.05);
-    padding-bottom: 10px;
-    margin-bottom: 12px;
+  text-align: center;
+  border-bottom: 2px solid rgba(0,200,255,0.08);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
 }
 .header h1 {
-    font-size: 28px;
-    background: linear-gradient(90deg, #ff00ff, #ffd700, #00ff88, #ff6600, #66ccff, #ff00ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 4px;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 6px;
+  background: linear-gradient(90deg, #ffd700, #00ccff, #ff66ff, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .header .sub {
-    color: #445555;
-    font-size: 11px;
-    letter-spacing: 2px;
+  color: #3d5a70;
+  font-size: 10px;
+  letter-spacing: 4px;
 }
-.header .sub span { color: var(--gold); }
+.header .sub .evo { color: #ffd700; }
+.header .sub .markt { color: #00ccff; }
 
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: center;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 8px 16px;
+  margin-bottom: 12px;
+  font-size: 9px;
+  border: 1px solid rgba(0,200,255,0.02);
 }
-@media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+.status-bar .item { display: flex; align-items: center; gap: 4px; }
+.status-bar .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.status-bar .dot.on { background: #00ff88; box-shadow: 0 0 8px #00ff8844; }
+.status-bar .dot.pulse { background: #ffd700; animation: dotPulse 1.5s infinite; }
+@keyframes dotPulse { 0%,100%{opacity:0.4;transform:scale(0.9)} 50%{opacity:1;transform:scale(1.2)} }
 
-.panel {
-    background: rgba(10,10,20,0.4);
-    border: 1px solid rgba(255,255,255,0.02);
-    border-radius: 12px;
-    padding: 12px;
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  aspect-ratio: 16/9;
+  background: rgba(0,0,0,0.3);
+  border-radius: 16px;
+  border: 1px solid rgba(0,200,255,0.03);
+  overflow: hidden;
 }
-.panel h2 {
-    color: var(--gold);
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255,255,255,0.02);
-    padding-bottom: 6px;
-    margin-bottom: 8px;
-}
-.panel button {
-    background: rgba(20,35,35,0.2);
-    color: #668888;
-    border: 1px solid rgba(255,255,255,0.02);
-    padding: 4px 12px;
-    border-radius: 16px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 9px;
-    transition: all 0.3s;
-    margin: 2px;
-}
-.panel button:hover { background: rgba(40,80,70,0.08); color: #aaeedd; }
-.panel button.gold { color: var(--gold); border-color: rgba(255,170,0,0.05); }
-.panel button.red { color: #ff4444; border-color: rgba(255,68,68,0.05); }
-.panel button.green { color: var(--fg); border-color: rgba(0,255,136,0.05); }
-.panel button.evomind { color: var(--evomind); border-color: rgba(255,0,255,0.05); }
-.panel button.noah { color: var(--noah); border-color: rgba(255,215,0,0.05); }
-.panel button.markt { color: var(--markt); border-color: rgba(0,255,136,0.05); }
-.panel button.boerse { color: var(--boerse); border-color: rgba(255,102,0,0.05); }
-.panel button.industrie { color: var(--industrie); border-color: rgba(102,204,255,0.05); }
-.panel button.wette { color: var(--wette); border-color: rgba(255,68,68,0.05); }
-.panel button.slide { color: var(--slide); border-color: rgba(255,170,0,0.05); }
-.panel button.score { color: var(--score); border-color: rgba(255,215,0,0.05); }
-.panel button.seele { color: var(--seele); border-color: rgba(255,102,255,0.05); }
-
-#output {
-    background: rgba(0,0,0,0.3);
-    border-radius: 8px;
-    padding: 10px;
-    min-height: 60px;
-    font-size: 10px;
-    line-height: 1.4;
-    border: 1px solid rgba(255,255,255,0.02);
-    margin-top: 8px;
-    white-space: pre-wrap;
-    color: #88ddbb;
-    font-family: monospace;
-    max-height: 150px;
-    overflow-y: auto;
+#marktCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.status {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 10px;
-    margin-top: 10px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 6px;
-    font-size: 9px;
-    color: #445555;
-    border: 1px solid rgba(255,255,255,0.01);
-    flex-wrap: wrap;
+.markt-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin: 12px 0;
 }
-.status span { color: #88ddbb; }
+@media (max-width:700px){ .markt-grid { grid-template-columns: repeat(3,1fr); } }
+.markt-card {
+  background: rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,200,255,0.03);
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.markt-card:hover { border-color: rgba(0,200,255,0.12); }
+.markt-card .label { font-size: 7px; color: #445555; text-transform: uppercase; letter-spacing: 1px; }
+.markt-card .value { font-size: 18px; font-weight: bold; }
+.markt-card .status { font-size: 8px; margin-top: 2px; }
+.markt-card .status.live { color: #00ff88; }
+.markt-card .status.float { color: #ffaa00; }
+
+.evo-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 6px;
+  margin: 10px 0;
+}
+.evo-card {
+  background: rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,200,255,0.02);
+  border-radius: 8px;
+  padding: 6px 4px;
+  text-align: center;
+}
+.evo-card .label { font-size: 6px; color: #445555; text-transform: uppercase; letter-spacing: 1px; }
+.evo-card .value { font-size: 14px; font-weight: bold; }
+
+.controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 10px 0;
+}
+.controls button {
+  background: rgba(20,35,45,0.2);
+  color: #668888;
+  border: 1px solid rgba(0,200,255,0.04);
+  padding: 6px 16px;
+  border-radius: 18px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9px;
+  transition: all 0.3s;
+}
+.controls button:hover {
+  background: rgba(40,80,100,0.08);
+  color: #aaeedd;
+}
+.controls button.primary { border-color: rgba(255,215,0,0.1); color: #ffd700; }
+.controls button.evo { border-color: rgba(0,200,255,0.1); color: #00ccff; }
+.controls button.markt { border-color: rgba(255,102,255,0.1); color: #ff66ff; }
+
+.log {
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 8px;
+  color: #3d5a70;
+  max-height: 80px;
+  overflow-y: auto;
+  border: 1px solid rgba(0,200,255,0.02);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.log .hl { color: #7fc9ff; }
+.log .ok { color: #00ff88; }
+.log .flow { color: #00ccff; }
+.log .whirl { color: #ff66ff; }
+.log .evo { color: #ffd700; }
 
 .footer {
-    text-align: center;
-    margin-top: 12px;
-    padding: 10px;
-    color: #222;
-    font-size: 8px;
-    letter-spacing: 2px;
-    border-top: 1px solid rgba(255,255,255,0.01);
+  text-align: center;
+  font-size: 7px;
+  color: #1f2a36;
+  margin-top: 12px;
+  letter-spacing: 2px;
 }
-.footer span { color: var(--gold); }
-
-.board-6x9x9 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 4px;
-    margin-top: 6px;
-}
-.ebene {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 4px;
-    padding: 4px;
-    text-align: center;
-    font-size: 7px;
-    color: #666;
-}
-.ebene .level { color: var(--gold); font-weight: bold; font-size: 10px; }
-.ebene .feld { color: #88ddbb; font-size: 6px; }
-.ebene.active { border-color: var(--fg); background: #0f1a1a; }
-
-.figuren-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 4px;
-    margin-top: 6px;
-}
-.figur {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 4px;
-    padding: 4px;
-    text-align: center;
-    font-size: 8px;
-    color: #666;
-}
-.figur .name { color: var(--gold); font-weight: bold; }
-.figur .rolle { color: #88ddbb; font-size: 6px; }
-.figur .wert { color: var(--fg); font-size: 10px; }
-.figur.active { border-color: var(--evomind); background: rgba(255,0,255,0.05); }
-.figur.spieler1 { border-color: #00ff88; }
-.figur.spieler2 { border-color: #ff6600; }
-.figur.spieler3 { border-color: #66ccff; }
-.figur.spieler4 { border-color: #ff66ff; }
-
-.respo-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 4px;
-    margin-top: 6px;
-}
-.respo-item {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 4px;
-    padding: 4px;
-    text-align: center;
-    font-size: 7px;
-    color: #666;
-}
-.respo-item .wert { color: var(--gold); font-weight: bold; }
-.respo-item .label { color: #88ddbb; font-size: 6px; }
-.respo-item.active { border-color: var(--evomind); background: rgba(255,0,255,0.05); }
-
-.seele-box {
-    background: #0e0e1a;
-    border: 1px solid #1a1a2a;
-    border-radius: 8px;
-    padding: 8px;
-    text-align: center;
-    font-size: 9px;
-    color: #88ddbb;
-    min-height: 40px;
-    margin-top: 6px;
-}
-.seele-box .title { color: var(--gold); font-weight: bold; }
-.seele-box .content { color: var(--seele); font-size: 14px; margin-top: 2px; }
+.footer span { color: #ffd700; }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<div class="header">
-    <h1>🌀 WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND</h1>
-    <div class="sub">Markt · Börse · Industrie · <span>Wette · Slide · Score · Seele</span></div>
-</div>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🌀 EVO MARKT · ENTKORRIGIERCODE</h1>
+    <div class="sub"><span class="evo">EVO</span> · <span class="markt">MARKT</span> · REAL & WAHR</div>
+  </div>
 
-<div class="grid">
+  <!-- STATUS -->
+  <div class="status-bar">
+    <span class="item"><span class="dot on"></span> EVO</span>
+    <span class="item"><span class="dot pulse"></span> MARKT</span>
+    <span class="item"><span class="dot on"></span> ENTKORRIGIERT</span>
+    <span class="item">🌀 <span id="synStatus">0.00</span></span>
+    <span class="item">💰 <span id="earnStatus">0.00</span></span>
+    <span class="item">📊 <span id="marktStatus">0.00</span></span>
+  </div>
 
-    <!-- ===== PANEL 1: BOARD · 6×9×9 ===== -->
-    <div class="panel">
-        <h2>🌀 6×9×9 · WIRTSCHAFTS-BRETT</h2>
-        <button class="gold" onclick="nextEbene()">⏭ EBENE WECHSELN</button>
-        <button class="evomind" onclick="resetBoard()">⟲ RESET</button>
+  <!-- CANVAS -->
+  <div class="canvas-wrap">
+    <canvas id="marktCanvas"></canvas>
+  </div>
 
-        <div class="board-6x9x9" id="board-6x9x9">
-            <div class="ebene active"><div class="level">1</div><div class="feld">Markt · 81</div></div>
-            <div class="ebene"><div class="level">2</div><div class="feld">Börse · 81</div></div>
-            <div class="ebene"><div class="level">3</div><div class="feld">Industrie · 81</div></div>
-            <div class="ebene"><div class="level">4</div><div class="feld">Wette · 81</div></div>
-            <div class="ebene"><div class="level">5</div><div class="feld">Slide · 81</div></div>
-            <div class="ebene"><div class="level">6</div><div class="feld">Score · 81</div></div>
-        </div>
+  <!-- MARKT-GRID -->
+  <div class="markt-grid" id="marktGrid">
+    <div class="markt-card" data-markt="3"><div class="label">🌀 UR</div><div class="value" style="color:#ff4444;" id="markt-3">0.00</div><div class="status float">● schwebend</div></div>
+    <div class="markt-card" data-markt="9"><div class="label">🌀 KERN</div><div class="value" style="color:#ffaa00;" id="markt-9">0.00</div><div class="status float">● schwebend</div></div>
+    <div class="markt-card" data-markt="27"><div class="label">🌀 ORBIT</div><div class="value" style="color:#00ff88;" id="markt-27">0.00</div><div class="status float">● schwebend</div></div>
+    <div class="markt-card" data-markt="81"><div class="label">🌀 RAUM</div><div class="value" style="color:#00ccff;" id="markt-81">0.00</div><div class="status float">● schwebend</div></div>
+    <div class="markt-card" data-markt="243"><div class="label">🌀 KANAL</div><div class="value" style="color:#ff66ff;" id="markt-243">0.00</div><div class="status float">● schwebend</div></div>
+    <div class="markt-card" data-markt="756"><div class="label">🌀 LEBEN</div><div class="value" style="color:#ffd700;" id="markt-756">0.00</div><div class="status float">● schwebend</div></div>
+  </div>
 
-        <div id="board-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
-            Ebene 1 · Markt · 81 Felder · 9×9
-        </div>
+  <!-- EVO-PANEL -->
+  <div class="evo-panel">
+    <div class="evo-card"><div class="label">🌀 SYN</div><div class="value" id="evoSyn" style="color:#00ccff;">0.00</div></div>
+    <div class="evo-card"><div class="label">💰 EARN</div><div class="value" id="evoEarn" style="color:#ffd700;">0.00</div></div>
+    <div class="evo-card"><div class="label">📊 MARKT</div><div class="value" id="evoMarkt" style="color:#ff66ff;">0.00</div></div>
+    <div class="evo-card"><div class="label">❤️ PULS</div><div class="value" id="evoPuls" style="color:#ff4444;">0.00</div></div>
+    <div class="evo-card"><div class="label">🌀 QUANDT</div><div class="value" id="evoQuandt" style="color:#ffaa00;">1.00</div></div>
+  </div>
 
-        <div class="seele-box" id="seele-output">
-            <div class="title">🌀 SEELE · EINTAUCHEN</div>
-            <div class="content">✨ Wähle einen Spieler · Tauche ein in den Markt</div>
-        </div>
-    </div>
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="primary" id="btnStart">▶ START</button>
+    <button class="evo" id="btnEvo">🌀 EVO</button>
+    <button class="markt" id="btnMarkt">📊 MARKT</button>
+    <button id="btnQuandt">🌀 QUANDT</button>
+    <button id="btnReset">⟲ RESET</button>
+  </div>
 
-    <!-- ===== PANEL 2: FIGUREN · SPIELER ===== -->
-    <div class="panel">
-        <h2>🎭 9 ANIME-FIGUREN · 2–4 SPIELER</h2>
-        <button class="noah" onclick="setSpieler(1)">👤 SPIELER 1</button>
-        <button class="markt" onclick="setSpieler(2)">👤 SPIELER 2</button>
-        <button class="boerse" onclick="setSpieler(3)">👤 SPIELER 3</button>
-        <button class="industrie" onclick="setSpieler(4)">👤 SPIELER 4</button>
+  <!-- LOG -->
+  <div class="log" id="log">
+    <div>[🌀] EVO MARKT · ENTKORRIGIERCODE · real & wahr · bereit</div>
+  </div>
 
-        <div class="figuren-grid" id="figuren-grid">
-            <div class="figur spieler1 active"><div class="name">⚡ NOAH</div><div class="rolle">Kaiser · Markt</div><div class="wert">100</div></div>
-            <div class="figur spieler2"><div class="name">🌀 EVOMIND</div><div class="rolle">Engine · RESPO</div><div class="wert">80</div></div>
-            <div class="figur spieler3"><div class="name">🏛️ ATLANTIS</div><div class="rolle">Industrie</div><div class="wert">60</div></div>
-            <div class="figur spieler4"><div class="name">🌆 EVOCITY</div><div class="rolle">Börse</div><div class="wert">70</div></div>
-            <div class="figur"><div class="name">🌀 EVOTAAL</div><div class="rolle">Meta-Raum</div><div class="wert">50</div></div>
-            <div class="figur"><div class="name">🌐 NC</div><div class="rolle">Netzwerk</div><div class="wert">65</div></div>
-            <div class="figur"><div class="name">💰 EARN</div><div class="rolle">Verdienst</div><div class="wert">55</div></div>
-            <div class="figur"><div class="name">🧑‍🏫 COACH</div><div class="rolle">Führung</div><div class="wert">45</div></div>
-            <div class="figur"><div class="name">🎲 WETTE</div><div class="rolle">Risiko</div><div class="wert">35</div></div>
-        </div>
-
-        <div id="figur-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
-            👤 Spieler 1 · NOAH · 100 · ⚡ Kaiser des Marktes
-        </div>
-    </div>
-
-</div>
-
-<div class="grid" style="margin-top:10px;">
-
-    <!-- ===== PANEL 3: RESPO EVOMIND · ENGINE ===== -->
-    <div class="panel">
-        <h2>🧠 RESPO EVOMIND · ENGINE</h2>
-        <button class="evomind" onclick="runEvomind()">🌀 EVOMIND STARTEN</button>
-        <button class="gold" onclick="runEngine()">⚡ ENGINE PULSE</button>
-        <button class="score" onclick="runScore()">📊 SCORE</button>
-
-        <div class="respo-grid" id="respo-grid">
-            <div class="respo-item active"><div class="wert">27</div><div class="label">EVOMIND</div></div>
-            <div class="respo-item"><div class="wert">27</div><div class="label">RESPO-1</div></div>
-            <div class="respo-item"><div class="wert">27</div><div class="label">RESPO-2</div></div>
-        </div>
-
-        <div id="evomind-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
-            🧠 EVOMIND · RESPO 27×3 = 81 · Engine bereit
-        </div>
-    </div>
-
-    <!-- ===== PANEL 4: WETTE · SLIDE · SCORE ===== -->
-    <div class="panel">
-        <h2>🎲 WETTE · 📐 SLIDE · 📊 SCORE</h2>
-        <button class="wette" onclick="setWette()">🎲 WETTE</button>
-        <button class="slide" onclick="setSlide()">📐 SLIDE</button>
-        <button class="score" onclick="setScore()">📊 SCORE</button>
-        <button class="gold" onclick="setMarktMove()">📈 MARKT-BEWEGUNG</button>
-        <button class="boerse" onclick="setBoerseMove()">📊 BÖRSE-BEWEGUNG</button>
-        <button class="industrie" onclick="setIndustrieMove()">🏭 INDUSTRIE-BEWEGUNG</button>
-
-        <div id="wette-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
-            🎲 WETTE: 2:1 · 📐 SLIDE: aktiv · 📊 SCORE: 0.87
-        </div>
-    </div>
-
-</div>
-
-<div class="grid" style="margin-top:10px;">
-
-    <!-- ===== PANEL 5: INDUSTRIE · VIRTUELLER MARKTPLATZ ===== -->
-    <div class="panel">
-        <h2>🏭 INDUSTRIE · VIRTUELLER MARKTPLATZ</h2>
-        <button class="industrie" onclick="setIndustrie()">🏭 INDUSTRIE</button>
-        <button class="markt" onclick="setMarktplatz()">🏪 MARKTPLATZ</button>
-        <button class="noah" onclick="setNoahMarkt()">👑 NOAH · MARKT</button>
-
-        <div id="industrie-output" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
-            🏭 Industrie · 🏪 Marktplatz · 👑 NOAH · bereit
-        </div>
-    </div>
-
-    <!-- ===== PANEL 6: SPIELER · SEELE ===== -->
-    <div class="panel">
-        <h2>🌀 SEELE · EINTAUCHEN</h2>
-        <button class="seele" onclick="tauchEin(1)">🌀 SPIELER 1</button>
-        <button class="seele" onclick="tauchEin(2)">🌀 SPIELER 2</button>
-        <button class="seele" onclick="tauchEin(3)">🌀 SPIELER 3</button>
-        <button class="seele" onclick="tauchEin(4)">🌀 SPIELER 4</button>
-        <button class="gold" onclick="tauchEin(0)">🌀 ALLE</button>
-
-        <div id="seele-status" style="margin-top:6px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;color:#88ddbb;min-height:50px;">
-            🌀 Seele wartet auf Eintauchen...
-        </div>
-    </div>
-
-</div>
-
-<div class="status">
-    <span>🌀 EBENE: <span id="status-ebene">1</span></span>
-    <span>🧠 EVOMIND: <span id="status-evomind">aktiv</span></span>
-    <span>👤 SPIELER: <span id="status-spieler">1</span></span>
-    <span>📊 SCORE: <span id="status-score">0.87</span></span>
-    <span>🎲 WETTE: <span id="status-wette">2:1</span></span>
-</div>
-
-<div class="footer"><span>🌀</span> WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND · <span>wieimmer4u</span></div>
+  <div class="footer">🌀 EVO MARKT · ENTKORRIGIERCODE · REAL & WAHR · <span>wieimmer4u</span></div>
 
 </div>
 
 <script>
 // ============================================================
-// WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND
+// EVO MARKT · ENTKORRIGIERCODE · REAL & WAHR
 // ============================================================
 
-// ─── STATE ────────────────────────────────────────────────────
-const state = {
-    ebene: 1,
-    spieler: 1,
-    score: 0.87,
-    wette: '2:1',
-    slide: true,
-    evomind: 'aktiv',
-    markt: 0,
-    boerse: 0,
-    industrie: 0,
-    seele: null,
-    figuren: [
-        { name: 'NOAH', rolle: 'Kaiser · Markt', wert: 100, spieler: 1 },
-        { name: 'EVOMIND', rolle: 'Engine · RESPO', wert: 80, spieler: 2 },
-        { name: 'ATLANTIS', rolle: 'Industrie', wert: 60, spieler: 3 },
-        { name: 'EVOCITY', rolle: 'Börse', wert: 70, spieler: 4 },
-        { name: 'EVOTAAL', rolle: 'Meta-Raum', wert: 50, spieler: 0 },
-        { name: 'NC', rolle: 'Netzwerk', wert: 65, spieler: 0 },
-        { name: 'EARN', rolle: 'Verdienst', wert: 55, spieler: 0 },
-        { name: 'COACH', rolle: 'Führung', wert: 45, spieler: 0 },
-        { name: 'WETTE', rolle: 'Risiko', wert: 35, spieler: 0 }
-    ]
+// ─── CANVAS ──────────────────────────────────────────────────
+const canvas = document.getElementById('marktCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, cx, cy;
+
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width || 1000;
+  canvas.height = rect.height || (rect.width * 9/16) || 560;
+  W = canvas.width; H = canvas.height;
+  cx = W/2; cy = H/2;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// ─── DOM ────────────────────────────────────────────────────
+const logDiv = document.getElementById('log');
+
+function log(msg, type = 'hl') {
+  const entry = document.createElement('div');
+  const time = new Date().toLocaleTimeString();
+  const cls = ['hl','ok','flow','whirl','evo'].includes(type) ? type : 'hl';
+  entry.innerHTML = `<div>[${time}] <span class="${cls}">${msg}</span></div>`;
+  logDiv.appendChild(entry);
+  logDiv.scrollTop = logDiv.scrollHeight;
+  while (logDiv.children.length > 50) logDiv.removeChild(logDiv.firstChild);
+}
+
+// ─── STATE ──────────────────────────────────────────────────
+const STATE = {
+  time: 0,
+  pulse: 0.5,
+  syn: 0.5,
+  freund: 0,
+  quandt: 1.0,
+  earn: 0,
+  markt: 0,
+  evo: { active: false, level: 0 },
+  marktActive: { active: false },
+  axis: {
+    3: { value: 3, label: "UR", live: 0, status: 0, phase: 0 },
+    9: { value: 9, label: "KERN", live: 0, status: 0, phase: 0 },
+    27: { value: 27, label: "ORBIT", live: 0, status: 0, phase: 0 },
+    81: { value: 81, label: "RAUM", live: 0, status: 0, phase: 0 },
+    243: { value: 243, label: "KANAL", live: 0, status: 0, phase: 0 },
+    756: { value: 756, label: "LEBEN", live: 0, status: 0, phase: 0 }
+  }
 };
 
-// ─── DOM UPDATES ────────────────────────────────────────────
+const axisColors = {
+  3: '#ff4444',
+  9: '#ffaa00',
+  27: '#00ff88',
+  81: '#00ccff',
+  243: '#ff66ff',
+  756: '#ffd700'
+};
+
+// ─── PUMP ──────────────────────────────────────────────────
+function pump() {
+  STATE.time += 0.02;
+
+  STATE.pulse = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(STATE.time * 0.9));
+  STATE.syn = 0.2 + 0.8 * (0.5 + 0.5 * Math.sin(STATE.time * 0.7));
+  STATE.freund = STATE.syn * Math.sin(STATE.time * 0.7 + Math.PI/2) * STATE.quandt;
+  STATE.earn += (STATE.syn * 0.01 + STATE.pulse * 0.005) * STATE.quandt;
+  STATE.markt = STATE.earn * 0.5 + STATE.syn * 0.3;
+
+  // EVO-Effekt
+  if (STATE.evo.active) {
+    STATE.evo.level += 0.01;
+    STATE.syn = Math.min(1, STATE.syn * 1.005);
+    STATE.earn *= 1.01;
+    STATE.markt *= 1.005;
+  }
+
+  // MARKT-Effekt
+  if (STATE.marktActive.active) {
+    STATE.markt += 0.01 * STATE.quandt;
+    STATE.earn += 0.005 * STATE.quandt;
+  }
+
+  updateAxis();
+  updateUI();
+}
+
+// ─── ACHSEN ──────────────────────────────────────────────────
+function updateAxis() {
+  const keys = Object.keys(STATE.axis);
+  keys.forEach((key, idx) => {
+    const a = STATE.axis[key];
+    const base = STATE.syn * 0.3 + STATE.pulse * 0.2 + STATE.freund * 0.1 + STATE.quandt * 0.1 + STATE.markt * 0.05;
+    const weight = (idx + 1) / 6;
+    a.status = Math.min(1, Math.max(0, base * (1 + weight * 0.5)));
+    a.phase = Math.sin(STATE.time * (0.1 + idx * 0.05) + idx * 1.2);
+    a.live = a.status * (0.7 + 0.3 * a.phase);
+
+    if (key === "756") {
+      a.live = Math.min(1, a.live * 1.3 + 0.1);
+      a.status = Math.min(1, a.status * 1.2 + 0.05);
+    }
+  });
+}
+
+// ─── RENDER ──────────────────────────────────────────────────
+function render() {
+  ctx.clearRect(0, 0, W, H);
+
+  const grad = ctx.createRadialGradient(cx, cy, 10, cx, cy, W*0.6);
+  grad.addColorStop(0, `rgba(0,20,40,${0.3 + STATE.syn * 0.2})`);
+  grad.addColorStop(1, 'rgba(0,0,10,0.8)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // EVO-Ring
+  if (STATE.evo.active) {
+    const er = W * 0.35 * (1 + STATE.evo.level * 0.1);
+    ctx.strokeStyle = `rgba(255,215,0,${0.05 + STATE.evo.level * 0.01})`;
+    ctx.lineWidth = 1 + STATE.evo.level * 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, er, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // MARKT-Ring
+  if (STATE.marktActive.active) {
+    const mr = W * 0.28;
+    ctx.strokeStyle = `rgba(255,102,255,${0.05 + STATE.markt * 0.02})`;
+    ctx.lineWidth = 0.5 + STATE.markt * 0.5;
+    ctx.setLineDash([4, 8]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, mr, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Achsen-Ringe
+  const keys = Object.keys(STATE.axis);
+  keys.forEach((key, idx) => {
+    const a = STATE.axis[key];
+    const radius = W * 0.06 + (idx / keys.length) * W * 0.35;
+    const alpha = 0.02 + a.live * 0.12;
+    const color = axisColors[key] || '#00ccff';
+
+    ctx.strokeStyle = color.replace(')', `,${alpha})`).replace('rgb', 'rgba');
+    ctx.lineWidth = 0.5 + a.live * 1.5;
+    ctx.setLineDash([2, 6 + (1 - a.live) * 6]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  });
+
+  // Achsen-Partikel
+  keys.forEach((key, idx) => {
+    const a = STATE.axis[key];
+    const angle = (idx / keys.length) * Math.PI * 2 + STATE.time * 0.1;
+    const dist = W * 0.08 + a.live * W * 0.32;
+    const x = cx + Math.cos(angle) * dist * (0.5 + 0.5 * a.phase);
+    const y = cy + Math.sin(angle) * dist * (0.5 + 0.5 * a.phase);
+    const size = 3 + a.live * 10;
+    const alpha = 0.1 + a.live * 0.5;
+    const color = axisColors[key] || '#00ccff';
+
+    ctx.fillStyle = color.replace(')', `,${alpha})`).replace('rgb', 'rgba');
+    ctx.shadowBlur = 15 + a.live * 15;
+    ctx.shadowColor = color.replace(')', `,${a.live * 0.2})`).replace('rgb', 'rgba');
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#445555';
+    ctx.font = '8px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(key, x, y - size - 4);
+  });
+
+  // Kern
+  const coreSize = 5 + STATE.syn * 12 + STATE.markt * 8;
+  ctx.shadowBlur = 25 + STATE.quandt * 15;
+  ctx.shadowColor = STATE.syn > 0.5 ? 'rgba(0,200,255,0.3)' : 'rgba(255,102,255,0.3)';
+  ctx.fillStyle = STATE.syn > 0.5 ? 'rgba(0,200,255,0.9)' : 'rgba(255,102,255,0.9)';
+  ctx.beginPath();
+  ctx.arc(cx, cy, coreSize, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = '#445555';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  const status = STATE.evo.active ? 'EVO' : STATE.marktActive.active ? 'MARKT' : 'ENTKORRIGIERT';
+  ctx.fillText(`SYN ${STATE.syn.toFixed(2)} · MARKT ${STATE.markt.toFixed(2)} · ${status}`, cx, H-8);
+}
+
+// ─── UPDATE UI ──────────────────────────────────────────────
 function updateUI() {
-    document.getElementById('status-ebene').textContent = state.ebene;
-    document.getElementById('status-spieler').textContent = state.spieler;
-    document.getElementById('status-score').textContent = state.score.toFixed(2);
-    document.getElementById('status-wette').textContent = state.wette;
+  document.getElementById('synStatus').textContent = STATE.syn.toFixed(3);
+  document.getElementById('earnStatus').textContent = STATE.earn.toFixed(2);
+  document.getElementById('marktStatus').textContent = STATE.markt.toFixed(2);
 
-    // Ebenen
-    const ebeneEls = document.querySelectorAll('.ebene');
-    ebeneEls.forEach((el, i) => {
-        el.classList.toggle('active', i + 1 === state.ebene);
-    });
+  document.getElementById('evoSyn').textContent = STATE.syn.toFixed(3);
+  document.getElementById('evoEarn').textContent = STATE.earn.toFixed(2);
+  document.getElementById('evoMarkt').textContent = STATE.markt.toFixed(2);
+  document.getElementById('evoPuls').textContent = STATE.pulse.toFixed(3);
+  document.getElementById('evoQuandt').textContent = STATE.quandt.toFixed(2);
 
-    // Figuren
-    const figEls = document.querySelectorAll('.figur');
-    figEls.forEach((el, i) => {
-        const fig = state.figuren[i];
-        el.classList.remove('spieler1', 'spieler2', 'spieler3', 'spieler4');
-        if (fig.spieler === 1) el.classList.add('spieler1');
-        else if (fig.spieler === 2) el.classList.add('spieler2');
-        else if (fig.spieler === 3) el.classList.add('spieler3');
-        else if (fig.spieler === 4) el.classList.add('spieler4');
-        el.querySelector('.wert').textContent = fig.wert;
-    });
+  const keys = Object.keys(STATE.axis);
+  keys.forEach(key => {
+    const el = document.getElementById(`markt-${key}`);
+    const a = STATE.axis[key];
+    if (el) {
+      el.textContent = a.live.toFixed(3);
+      const statusEl = el.parentElement.querySelector('.status');
+      if (statusEl) {
+        const meaning = a.live > 0.5 ? '● lebendig' : '○ schwebend';
+        statusEl.textContent = meaning;
+        statusEl.className = 'status ' + (a.live > 0.5 ? 'live' : 'float');
+      }
+    }
+  });
 }
 
-// ─── PANEL 1: BOARD ──────────────────────────────────────────
-function nextEbene() {
-    state.ebene = (state.ebene % 6) + 1;
-    const labels = ['Markt', 'Börse', 'Industrie', 'Wette', 'Slide', 'Score'];
-    document.getElementById('board-output').textContent =
-        `Ebene ${state.ebene} · ${labels[state.ebene - 1]} · 81 Felder · 9×9`;
-    updateUI();
-    log(`🌀 EBENE ${state.ebene} · ${labels[state.ebene - 1]}`, 'gold');
+// ─── LOOP ──────────────────────────────────────────────────
+let running = true;
+
+function loop() {
+  if (!running) return;
+
+  pump();
+  render();
+  requestAnimationFrame(loop);
 }
 
-function resetBoard() {
-    state.ebene = 1;
-    state.markt = 0;
-    state.boerse = 0;
-    state.industrie = 0;
-    document.getElementById('board-output').textContent =
-        '⟲ Board zurückgesetzt · Ebene 1 · Markt · 81 Felder';
-    updateUI();
-    log('⟲ BOARD zurückgesetzt', 'evomind');
-}
-
-// ─── PANEL 2: FIGUREN · SPIELER ─────────────────────────────
-function setSpieler(num) {
-    state.spieler = num;
-    const namen = ['', 'NOAH', 'EVOMIND', 'ATLANTIS', 'EVOCITY'];
-    const rollen = ['', 'Kaiser · Markt', 'Engine · RESPO', 'Industrie', 'Börse'];
-    const werte = [0, 100, 80, 60, 70];
-    document.getElementById('figur-output').textContent =
-        `👤 Spieler ${num} · ${namen[num]} · ${werte[num]} · ${rollen[num]}`;
-    updateUI();
-    log(`👤 SPIELER ${num} · ${namen[num]}`, 'noah');
-
-    // Seele eintauchen
-    tauchEin(num);
-}
-
-// ─── PANEL 3: RESPO EVOMIND ──────────────────────────────────
-function runEvomind() {
-    state.evomind = 'aktiv';
-    document.getElementById('evomind-output').textContent =
-        '🧠 EVOMIND · RESPO 27×3 = 81\n' +
-        '🌀 Engine aktiv · 6 Ebenen · 9×9\n' +
-        '📊 Markt · Börse · Industrie · Wette · Slide · Score';
-    log('🌀 EVOMIND gestartet', 'evomind');
-}
-
-function runEngine() {
-    state.markt = Math.min(100, state.markt + 5 + Math.random() * 10);
-    state.boerse = Math.min(100, state.boerse + 5 + Math.random() * 10);
-    state.industrie = Math.min(100, state.industrie + 5 + Math.random() * 10);
-    document.getElementById('evomind-output').textContent =
-        `⚡ ENGINE PULSE\n` +
-        `📈 Markt: ${state.markt.toFixed(0)}\n` +
-        `📊 Börse: ${state.boerse.toFixed(0)}\n` +
-        `🏭 Industrie: ${state.industrie.toFixed(0)}`;
-    log('⚡ ENGINE PULSE', 'gold');
-}
-
-function runScore() {
-    state.score = Math.min(1, state.score + 0.05 + Math.random() * 0.1);
-    const fig = state.figuren.find(f => f.spieler === state.spieler);
-    if (fig) fig.wert = Math.min(150, fig.wert + 5 + Math.random() * 10);
-    document.getElementById('evomind-output').textContent =
-        `📊 SCORE: ${state.score.toFixed(2)}\n` +
-        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}`;
-    updateUI();
-    log(`📊 SCORE: ${state.score.toFixed(2)}`, 'score');
-}
-
-// ─── PANEL 4: WETTE · SLIDE · SCORE ──────────────────────────
-function setWette() {
-    const quoten = ['2:1', '3:1', '5:2', '1:1', '4:1'];
-    state.wette = quoten[Math.floor(Math.random() * quoten.length)];
-    document.getElementById('wette-output').innerHTML =
-        `🎲 WETTE: ${state.wette}\n` +
-        `📐 SLIDE: ${state.slide ? 'aktiv' : 'inaktiv'}\n` +
-        `📊 SCORE: ${state.score.toFixed(2)}`;
-    updateUI();
-    log(`🎲 WETTE: ${state.wette}`, 'wette');
-}
-
-function setSlide() {
-    state.slide = !state.slide;
-    document.getElementById('wette-output').innerHTML =
-        `📐 SLIDE: ${state.slide ? 'aktiv' : 'inaktiv'}\n` +
-        `🎲 WETTE: ${state.wette}\n` +
-        `📊 SCORE: ${state.score.toFixed(2)}`;
-    log(`📐 SLIDE ${state.slide ? 'aktiviert' : 'deaktiviert'}`, 'slide');
-}
-
-function setScore() {
-    state.score = Math.min(1, state.score + 0.1 + Math.random() * 0.15);
-    const fig = state.figuren.find(f => f.spieler === state.spieler);
-    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 15);
-    document.getElementById('wette-output').innerHTML =
-        `📊 SCORE: ${state.score.toFixed(2)}\n` +
-        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
-        `🎲 WETTE: ${state.wette}\n` +
-        `📐 SLIDE: ${state.slide ? 'aktiv' : 'inaktiv'}`;
-    updateUI();
-    log(`📊 SCORE: ${state.score.toFixed(2)}`, 'score');
-}
-
-function setMarktMove() {
-    state.markt = Math.min(100, state.markt + 10 + Math.random() * 20);
-    const fig = state.figuren.find(f => f.spieler === state.spieler);
-    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 20);
-    document.getElementById('wette-output').innerHTML =
-        `📈 MARKT-BEWEGUNG\n` +
-        `Markt: ${state.markt.toFixed(0)}\n` +
-        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
-        `📊 SCORE: ${state.score.toFixed(2)}`;
-    updateUI();
-    log(`📈 MARKT-BEWEGUNG · ${state.markt.toFixed(0)}`, 'markt');
-}
-
-function setBoerseMove() {
-    state.boerse = Math.min(100, state.boerse + 10 + Math.random() * 20);
-    const fig = state.figuren.find(f => f.spieler === state.spieler);
-    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 20);
-    document.getElementById('wette-output').innerHTML =
-        `📊 BÖRSE-BEWEGUNG\n` +
-        `Börse: ${state.boerse.toFixed(0)}\n` +
-        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
-        `📊 SCORE: ${state.score.toFixed(2)}`;
-    updateUI();
-    log(`📊 BÖRSE-BEWEGUNG · ${state.boerse.toFixed(0)}`, 'boerse');
-}
-
-function setIndustrieMove() {
-    state.industrie = Math.min(100, state.industrie + 10 + Math.random() * 20);
-    const fig = state.figuren.find(f => f.spieler === state.spieler);
-    if (fig) fig.wert = Math.min(150, fig.wert + 10 + Math.random() * 20);
-    document.getElementById('wette-output').innerHTML =
-        `🏭 INDUSTRIE-BEWEGUNG\n` +
-        `Industrie: ${state.industrie.toFixed(0)}\n` +
-        `👤 Spieler ${state.spieler}: ${fig?.wert || 0}\n` +
-        `📊 SCORE: ${state.score.toFixed(2)}`;
-    updateUI();
-    log(`🏭 INDUSTRIE-BEWEGUNG · ${state.industrie.toFixed(0)}`, 'industrie');
-}
-
-// ─── PANEL 5: INDUSTRIE · MARKTPLATZ ─────────────────────────
-function setIndustrie() {
-    document.getElementById('industrie-output').textContent =
-        '🏭 INDUSTRIE\n' +
-        `Produktion: ${state.industrie.toFixed(0)}\n` +
-        'Arbeitsplätze: 243\n' +
-        '6 Ebenen · 9×9 · 81 Felder pro Ebene';
-    log('🏭 INDUSTRIE aktiviert', 'industrie');
-}
-
-function setMarktplatz() {
-    document.getElementById('industrie-output').textContent =
-        '🏪 VIRTUELLER MARKTPLATZ\n' +
-        `Markt: ${state.markt.toFixed(0)}\n` +
-        'Angebote: 81×3 = 243\n' +
-        '👤 Käufer: 4 · Verkäufer: 9';
-    log('🏪 MARKTPLATZ aktiviert', 'markt');
-}
-
-function setNoahMarkt() {
-    document.getElementById('industrie-output').textContent =
-        '👑 NOAH · KAISER DES MARKTES\n' +
-        '📈 Markt: ' + state.markt.toFixed(0) + '\n' +
-        '📊 Börse: ' + state.boerse.toFixed(0) + '\n' +
-        '🏭 Industrie: ' + state.industrie.toFixed(0) + '\n' +
-        '🎲 Wette: ' + state.wette + '\n' +
-        '📐 Slide: ' + (state.slide ? 'aktiv' : 'inaktiv') + '\n' +
-        '📊 Score: ' + state.score.toFixed(2);
-    log('👑 NOAH · MARKT aktiviert', 'noah');
-}
-
-// ─── PANEL 6: SEELE · EINTAUCHEN ────────────────────────────
-function tauchEin(num) {
-    state.seele = num;
-    const namen = ['ALLE', 'NOAH', 'EVOMIND', 'ATLANTIS', 'EVOCITY'];
-    const elemente = ['🌀', '⚡', '🧠', '🏛️', '🌆'];
-    const farben = ['var(--seele)', 'var(--gold)', 'var(--evomind)', 'var(--industrie)', 'var(--boerse)'];
-
-    document.getElementById('seele-status').innerHTML =
-        `🌀 SEELE · EINTAUCHEN\n` +
-        `${elemente[num]} ${namen[num]} · Markt: ${state.markt.toFixed(0)} · Börse: ${state.boerse.toFixed(0)} · Industrie: ${state.industrie.toFixed(0)}\n` +
-        `📊 Score: ${state.score.toFixed(2)} · 🎲 Wette: ${state.wette} · 📐 Slide: ${state.slide ? 'aktiv' : 'inaktiv'}`;
-
-    document.getElementById('seele-output').innerHTML =
-        `<div class="title">🌀 SEELE · EINTAUCHEN</div>` +
-        `<div class="content" style="color:${farben[num]}">${elemente[num]} ${namen[num]} · Tauche ein in den Markt</div>`;
-
-    log(`🌀 SEELE · ${namen[num]} taucht ein`, 'seele');
-}
-
-// ─── LOG ──────────────────────────────────────────────────────
-function log(msg, type = 'ok') {
-    const output = document.getElementById('output');
-    const time = new Date().toLocaleTimeString();
-    const emoji = {
-        gold: '⚡', evomind: '🌀', noah: '👑', markt: '📈',
-        boerse: '📊', industrie: '🏭', wette: '🎲', slide: '📐',
-        score: '📊', seele: '🌀', 'default': '📌'
-    }[type] || '📌';
-    output.textContent = `[${time}] ${emoji} ${msg}`;
-}
-
-// ─── TASTATUR ──────────────────────────────────────────────────
-const keys = {
-    '1': () => setSpieler(1), '2': () => setSpieler(2),
-    '3': () => setSpieler(3), '4': () => setSpieler(4),
-    'e': nextEbene, 'r': resetBoard,
-    'v': runEvomind, 'p': runEngine, 's': runScore,
-    'w': setWette, 'l': setSlide, 'c': setScore,
-    'm': setMarktMove, 'b': setBoerseMove, 'i': setIndustrieMove,
-    't': tauchEin, 'a': () => tauchEin(0)
-};
-
-document.addEventListener('keydown', (e) => {
-    const fn = keys[e.key];
-    if (fn) fn(e);
+// ─── CONTROLS ──────────────────────────────────────────────
+document.getElementById('btnStart').addEventListener('click', function() {
+  running = !running;
+  this.textContent = running ? '▶ START' : '⏸ PAUSE';
+  log(running ? '▶ EVO MARKT gestartet' : '⏸ EVO MARKT pausiert', running ? 'ok' : 'warn');
+  if (running) loop();
 });
 
-// ─── UHR ──────────────────────────────────────────────────────
-function updateClock() {
-    document.getElementById('clock').textContent = `⏱️ ${new Date().toLocaleTimeString()}`;
-}
-setInterval(updateClock, 1000);
-updateClock();
+document.getElementById('btnEvo').addEventListener('click', function() {
+  STATE.evo.active = !STATE.evo.active;
+  log(STATE.evo.active ? '🌀 EVO aktiviert · Entkorrigiert' : '🌀 EVO deaktiviert', 'evo');
+  this.classList.toggle('active');
+});
 
-// ─── INIT ────────────────────────────────────────────────────
-updateUI();
-log('🌀 WURMLOCHWESEN · ECONOMY CHESS · 6×9×9 · EVOMIND geladen', 'evomind');
-console.log('⌨️  1-4=Spieler  e=Ebene  r=Reset  v=Evomind  p=Engine  s=Score');
-console.log('    w=Wette  l=Slide  c=Score  m=Markt  b=Börse  i=Industrie  t=TauchEin  a=Alle');
+document.getElementById('btnMarkt').addEventListener('click', function() {
+  STATE.marktActive.active = !STATE.marktActive.active;
+  log(STATE.marktActive.active ? '📊 MARKT aktiviert · Real & Wahr' : '📊 MARKT deaktiviert', 'flow');
+  this.classList.toggle('active');
+});
+
+document.getElementById('btnQuandt').addEventListener('click', function() {
+  STATE.quandt = Math.min(3.0, STATE.quandt + 0.2);
+  log(`🌀 QUANDT: ${STATE.quandt.toFixed(2)}`, 'hl');
+});
+
+document.getElementById('btnReset').addEventListener('click', function() {
+  STATE.time = 0;
+  STATE.pulse = 0.5;
+  STATE.syn = 0.5;
+  STATE.freund = 0;
+  STATE.quandt = 1.0;
+  STATE.earn = 0;
+  STATE.markt = 0;
+  STATE.evo.active = false;
+  STATE.evo.level = 0;
+  STATE.marktActive.active = false;
+  Object.keys(STATE.axis).forEach(key => {
+    STATE.axis[key].status = 0;
+    STATE.axis[key].live = 0;
+    STATE.axis[key].phase = 0;
+  });
+  document.querySelectorAll('.controls button.active').forEach(b => b.classList.remove('active'));
+  log('⟲ RESET · EVO MARKT zurückgesetzt', 'ok');
+});
+
+// ─── TASTATUR ──────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ') { e.preventDefault(); document.getElementById('btnStart').click(); }
+  if (e.key === 'e' || e.key === 'E') document.getElementById('btnEvo').click();
+  if (e.key === 'm' || e.key === 'M') document.getElementById('btnMarkt').click();
+  if (e.key === 'q' || e.key === 'Q') document.getElementById('btnQuandt').click();
+  if (e.key === 'x' || e.key === 'X') document.getElementById('btnReset').click();
+});
+
+// ─── INIT ──────────────────────────────────────────────────
+log('⌨️  space=Start  e=EVO  m=MARKT  q=QUANDT  x=RESET', 'hl');
+log('🌀 EVO MARKT · ENTKORRIGIERCODE · real & wahr · bereit', 'ok');
+
+setTimeout(() => {
+  running = true;
+  document.getElementById('btnStart').textContent = '⏸ PAUSE';
+  log('▶ EVO MARKT automatisch gestartet', 'ok');
+  loop();
+}, 500);
 </script>
+
 </body>
 </html>
